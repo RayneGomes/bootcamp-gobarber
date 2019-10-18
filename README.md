@@ -5,9 +5,7 @@
 </h1>
 
 ### Sobre o projeto
-<p align="center">
- Sistema de agendamento para barbearia, permitindo o usuário agendar um melhor horário com o barbeiro de sua preferência e aos barbeiros, acompanharem suas agendas com notificações de novos agendamentos ou cancelamentos. Desafio desenvolvido durante treinamento BootCamp da Rocketseat.
-</p>
+Sistema de agendamento para barbearia, permitindo o usuário agendar um melhor horário com o barbeiro de sua preferência e aos barbeiros, acompanharem suas agendas com notificações de novos agendamentos ou cancelamentos. Desafio desenvolvido durante treinamento BootCamp da Rocketseat.
 
 ### Um pouco sobre as ferramentas
 -  [Node.js](https://nodejs.org/en/)

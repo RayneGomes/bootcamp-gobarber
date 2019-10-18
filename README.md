@@ -1,10 +1,8 @@
 <h1 align="center">
-  <img alt="GoBarber" title="GoBarber" src="https://i.pinimg.com/originals/31/1a/31/311a31fad54dd3e355b50cfab60cb00c.png" height="200px" />
-</h1>
-
-<h3 align="center">
+  <img alt="GoBarber" title="GoBarber" src="https://i.pinimg.com/originals/31/1a/31/311a31fad54dd3e355b50cfab60cb00c.png" height="150px" />
+  <br>
   GoBarber
-</h3>
+</h1>
 
 ### Sobre o projeto
 <p align="center">

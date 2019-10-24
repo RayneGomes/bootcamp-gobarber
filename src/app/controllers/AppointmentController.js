@@ -65,6 +65,16 @@ class AppointmentController {
       });
     }
 
+    /** *
+     * Check if user is not the same of provider
+     */
+
+    if (provider_id === req.userId) {
+      return res.status(401).json({
+        error: 'You can not create appointments to yourself',
+      });
+    }
+
     const hourStart = startOfHour(parseISO(date));
 
     /** *

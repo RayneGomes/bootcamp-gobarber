@@ -5,6 +5,7 @@
 .vscode
 
 # production
+/dist
 /build
 
 # misc

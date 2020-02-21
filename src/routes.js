@@ -1,4 +1,7 @@
 import { Router } from 'express';
+import Brute from 'express-brute';
+import BruteRedis from 'express-brute-redis';
+import moment from 'moment';
 import multer from 'multer';
 
 import multerConfig from './config/mutter';
@@ -17,7 +20,43 @@ import authMiddleware from './app/middlewares/auth';
 const routes = new Router();
 const upload = multer(multerConfig);
 
-routes.post('/sessions', SessionController.store);
+const failCallback = (req, res, next, nextValidRequestDate) => {
+  res.status(401).json({
+    error: `You've made too many failed attempts in a short period of time, please try again ${moment(
+      nextValidRequestDate
+    ).fromNow()}`,
+  });
+  // res.redirect('/login');
+};
+
+const handleStoreError = error => {
+  console.error(error);
+
+  throw {
+    message: error.message,
+    parent: error.parent,
+  };
+};
+
+const bruteStore = new BruteRedis({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  prefix: 'login_attempts:',
+});
+
+const bruteForce = new Brute(bruteStore, {
+  freeRetries: 5,
+  minWait: 1000 * 60 * 1, // 1 minutes
+  maxWait: 1000 * 60 * 5, // 5 minutes,
+  lifetime: 1000 * 60 * 20, // 20 minutes,
+  failCallback,
+  handleStoreError,
+});
+
+routes.get('/', (req, res) => {
+  res.json({ message: 'funcionando...' });
+});
+routes.post('/sessions', bruteForce.prevent, SessionController.store);
 
 routes.post('/users', UserController.store);
 

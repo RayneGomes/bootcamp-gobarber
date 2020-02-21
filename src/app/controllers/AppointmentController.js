@@ -10,9 +10,19 @@ import CancellationMail from '../jobs/CancellationMail';
 import Queue from '../../lib/Queue';
 import Notification from '../schemas/Notification';
 
+import Cache from '../../lib/Cache';
+
 class AppointmentController {
   async index(req, res) {
     const { page = 1 } = req.query;
+
+    const cacheKey = `user:${req.userId}:appointments:${page}`;
+    const cached = await Cache.get(cacheKey);
+
+    if (cached) {
+      return res.json(cached);
+    }
+
     const appointments = await Appointment.findAll({
       where: {
         user_id: req.userId,
@@ -37,6 +47,8 @@ class AppointmentController {
         },
       ],
     });
+
+    await Cache.set(cacheKey, appointments);
 
     return res.json(appointments);
   }
@@ -122,6 +134,8 @@ class AppointmentController {
       user: provider_id,
     });
 
+    await Cache.invalidatePrefix(`user:${user.id}:appointments`);
+
     return res.json(appointment);
   }
 
@@ -161,6 +175,8 @@ class AppointmentController {
     await Queue.add(CancellationMail.key, {
       appointment,
     });
+
+    await Cache.invalidatePrefix(`user:${appointment.user_id}:appointments`);
 
     return res.json({ appointment });
   }
